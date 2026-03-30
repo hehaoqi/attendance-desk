@@ -1,0 +1,55 @@
+{
+  "name": "attendance-system",
+  "version": "1.0.0",
+  "description": "工人考勤管理系统",
+  "main": "electron/main.js",
+  "scripts": {
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:electron": "ELECTRON_RUN_AS_NODE= electron . --dev",
+    "dev": "npm run dev:frontend & sleep 3 && npm run dev:electron",
+    "postinstall": "electron-builder install-app-deps",
+    "rebuild:electron": "electron-builder install-app-deps",
+    "build:frontend": "cd frontend && npm run build",
+    "build:electron": "electron-builder",
+    "build": "npm run build:frontend && npm run build:electron",
+    "start": "ELECTRON_RUN_AS_NODE= electron ."
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.0.0",
+    "express": "^4.21.0",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0",
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0"
+  },
+  "build": {
+    "appId": "com.attendance.system",
+    "productName": "工人考勤管理系统",
+    "directories": {
+      "output": "dist-electron"
+    },
+    "files": [
+      "electron/**/*",
+      "server/**/*",
+      "frontend/dist/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "portable": {
+      "artifactName": "工人考勤管理系统.exe"
+    },
+    "asar": false
+  }
+}

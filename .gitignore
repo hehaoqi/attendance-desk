@@ -1,0 +1,85 @@
+# ====================
+# Dependencies
+# ====================
+node_modules/
+
+# ====================
+# Build Output
+# ====================
+dist/
+dist-electron/
+dist-ssr/
+*.local
+
+# ====================
+# Environment
+# ====================
+.env
+.env.local
+.env.*.local
+
+# ====================
+# Logs
+# ====================
+logs/
+*.log
+npm-debug.log*
+
+# ====================
+# SQLite Database
+# ====================
+*.db
+*.db-shm
+*.db-wal
+
+# ====================
+# IDE / Editor
+# ====================
+.vscode/
+.idea/
+*.sw?
+
+# ====================
+# OS Generated
+# ====================
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ====================
+# Cache / Temp
+# ====================
+.cache/
+.vite/
+*.tsbuildinfo
+*.tmp
+*.temp
+*.bak
+
+# ====================
+# Test Output
+# ====================
+coverage/
+smoke-test-result-*.json
+credentials.json
+secrets.json
+
+# Documentation
+*.pdf
+!docs/*.pdf
+
+# Archives
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Lock files (keep package-lock.json, yarn.lock, pnpm-lock.yaml)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+*.png
