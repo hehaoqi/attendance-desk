@@ -80,7 +80,7 @@ def main():
     worker_payload = {
         "name": worker_name,
         "phone": "13900001234",
-        "workerType": "smoke",
+        "workerType": "temporary",
         "skillLevel": "senior",
         "dailyWage": 300,
         "overtimeWage": 50,

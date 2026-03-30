@@ -90,6 +90,7 @@ router.get('/backup/export', async (req, res) => {
 router.post('/backup/import', express.raw({ type: 'application/octet-stream', limit: '50mb' }), (req, res) => {
   const db = getDatabase();
   const importBuffer = req.body;
+  let attached = false;
 
   if (!Buffer.isBuffer(importBuffer) || importBuffer.length === 0) {
     return res.status(400).json({ success: false, message: '导入文件不能为空' });
@@ -100,15 +101,16 @@ router.post('/backup/import', express.raw({ type: 'application/octet-stream', li
   try {
     fs.writeFileSync(tempImportPath, importBuffer);
 
+    db.pragma('foreign_keys = OFF');
+    db.exec(`ATTACH DATABASE '${tempImportPath.replace(/'/g, "''")}' AS importdb`);
+    attached = true;
+
     const tableRows = db
       .prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'")
       .all();
     const tableNames = tableRows.map((row) => row.name);
 
     const importTx = db.transaction(() => {
-      db.pragma('foreign_keys = OFF');
-      db.exec(`ATTACH DATABASE '${tempImportPath.replace(/'/g, "''")}' AS importdb`);
-
       const currentVersion = Number(db.prepare('PRAGMA user_version').get()?.user_version || 0);
       const importVersion = Number(db.prepare('PRAGMA importdb.user_version').get()?.user_version || 0);
       if (currentVersion > 0 && importVersion > currentVersion) {
@@ -138,18 +140,20 @@ router.post('/backup/import', express.raw({ type: 'application/octet-stream', li
         db.prepare(`DELETE FROM ${tableName}`).run();
         db.prepare(`INSERT INTO ${tableName} SELECT * FROM importdb.${tableName}`).run();
       }
-
-      db.exec('DETACH DATABASE importdb');
-      db.pragma('foreign_keys = ON');
-      db.pragma('wal_checkpoint(TRUNCATE)');
     });
 
     importTx();
+    db.exec('DETACH DATABASE importdb');
+    attached = false;
+    db.pragma('foreign_keys = ON');
+    db.pragma('wal_checkpoint(TRUNCATE)');
     res.json({ success: true, message: '数据导入成功' });
   } catch (err) {
     try {
       db.pragma('foreign_keys = ON');
-      db.exec('DETACH DATABASE importdb');
+      if (attached) {
+        db.exec('DETACH DATABASE importdb');
+      }
     } catch (e) {
       // Ignore detach failure when not attached.
     }

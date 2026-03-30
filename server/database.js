@@ -130,6 +130,16 @@ function initDatabase() {
     CREATE INDEX IF NOT EXISTS idx_years_year_number ON years(year_number);
   `);
 
+  db.exec(`
+    UPDATE workers
+    SET worker_type = CASE
+      WHEN lower(trim(worker_type)) IN ('smoke', 'temporary') OR trim(worker_type) = '临时工' THEN 'temporary'
+      WHEN lower(trim(worker_type)) = 'permanent' OR trim(worker_type) = '正式工' THEN 'permanent'
+      ELSE worker_type
+    END
+    WHERE worker_type IS NOT NULL;
+  `);
+
   // Insert default data if tables are empty
   const roleCount = db.prepare('SELECT COUNT(*) as count FROM roles').get().count;
   if (roleCount === 0) {
