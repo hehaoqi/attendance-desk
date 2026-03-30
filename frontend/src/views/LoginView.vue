@@ -2,7 +2,6 @@
   <div class="login-page">
     <div class="login-left">
       <div class="brand-section">
-        <img src="/logo.png" alt="Logo" class="brand-logo" />
         <h1 class="brand-title">工人考勤管理系统</h1>
         <p class="brand-desc">高效管理工人考勤、工资计算与发放</p>
       </div>
@@ -166,15 +165,6 @@ async function handleLogin() {
   position: relative;
   z-index: 1;
   margin-bottom: 48px;
-}
-
-.brand-logo {
-  width: 72px;
-  height: 72px;
-  border-radius: 16px;
-  margin-bottom: 24px;
-  object-fit: contain;
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
 }
 
 .brand-title {

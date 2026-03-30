@@ -9,7 +9,6 @@
         theme="dark"
       >
         <div class="sidebar-logo">
-          <img src="/logo.png" alt="Logo" class="logo-img" />
           <transition name="fade">
             <span v-if="!collapsed" class="logo-text">考勤管理</span>
           </transition>
@@ -182,17 +181,8 @@ function logout() {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
   padding: 0 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.logo-img {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  object-fit: contain;
-  flex-shrink: 0;
 }
 
 .logo-text {
